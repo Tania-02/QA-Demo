@@ -412,15 +412,15 @@
                                 class="dropdown-menu pull-right" role="menu"><li><div
                                 class="tabe-bootgrid__checkbox checkbox checkbox--dark"><label
                                 class="table-bootgrid__label"><input name="id" type="checkbox" value="1"
-                                                                     class="dropdown-item-checkbox" checked="checked"> ID<i
+                                                                     class="dropdown-item-checkbox" checked="checked">Rank<i
                                 class="input-helper"></i></label></div></li><li><div
                                 class="tabe-bootgrid__checkbox checkbox checkbox--dark"><label
                                 class="table-bootgrid__label"><input name="sender" type="checkbox" value="1"
-                                                                     class="dropdown-item-checkbox" checked="checked"> Sender<i
+                                                                     class="dropdown-item-checkbox" checked="checked">Name<i
                                 class="input-helper"></i></label></div></li><li><div
                                 class="tabe-bootgrid__checkbox checkbox checkbox--dark"><label
                                 class="table-bootgrid__label"><input name="received" type="checkbox" value="1"
-                                                                     class="dropdown-item-checkbox" checked="checked"> Received<i
+                                                                     class="dropdown-item-checkbox" checked="checked">Marks Obtained<i
                                 class="input-helper"></i></label></div></li></ul></span></div>
                     </div>
                     <div class="table-responsive">
@@ -429,68 +429,28 @@
                             <tr>
                                 <th data-column-id="id" class="text-left" style=""><a href="javascript:void(0);"
                                                                                       class="column-header-anchor sortable"><span
-                                        class="text">ID</span><span class="table-bootgrid__icon zmdi"></span></a></th>
+                                        class="text">Rank</span><span class="table-bootgrid__icon zmdi"></span></a></th>
                                 <th data-column-id="sender" class="text-left" style=""><a href="javascript:void(0);"
                                                                                           class="column-header-anchor sortable"><span
-                                        class="text">Sender</span><span
+                                        class="text">Name</span><span
                                         class="table-bootgrid__icon zmdi zmdi-sort-amount-desc"></span></a></th>
                                 <th data-column-id="received" class="text-left" style=""><a href="javascript:void(0);"
                                                                                             class="column-header-anchor sortable"><span
-                                        class="text">Received</span><span class="table-bootgrid__icon zmdi"></span></a>
+                                        class="text">Marks Obtained</span><span class="table-bootgrid__icon zmdi"></span></a>
                                 </th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr data-row-id="0">
-                                <td class="text-left" style="">10250</td>
-                                <td class="text-left" style="">tim@microsoft.com</td>
-                                <td class="text-left" style="">26.10.2013</td>
+                            {% for datai in data %}
+                            <tr data-row-id="{{ forloop.counter0 }}">
+                                <td class="text-left" style="">{{ forloop.counter }}</td>
+                                <td class="text-left" style="">{{ datai.0 }}</td>
+                                <td class="text-left" style="">{{ datai.1 }}</td>
                             </tr>
-                            <tr data-row-id="1">
-                                <td class="text-left" style="">10245</td>
-                                <td class="text-left" style="">tim@microsoft.com</td>
-                                <td class="text-left" style="">21.10.2013</td>
-                            </tr>
-                            <tr data-row-id="2">
-                                <td class="text-left" style="">10240</td>
-                                <td class="text-left" style="">tim@microsoft.com</td>
-                                <td class="text-left" style="">16.10.2013</td>
-                            </tr>
-                            <tr data-row-id="3">
-                                <td class="text-left" style="">10235</td>
-                                <td class="text-left" style="">tim@microsoft.com</td>
-                                <td class="text-left" style="">11.10.2013</td>
-                            </tr>
-                            <tr data-row-id="4">
-                                <td class="text-left" style="">10251</td>
-                                <td class="text-left" style="">simon@yahoo.com</td>
-                                <td class="text-left" style="">27.10.2013</td>
-                            </tr>
-                            <tr data-row-id="5">
-                                <td class="text-left" style="">10246</td>
-                                <td class="text-left" style="">simon@yahoo.com</td>
-                                <td class="text-left" style="">22.10.2013</td>
-                            </tr>
-                            <tr data-row-id="6">
-                                <td class="text-left" style="">10241</td>
-                                <td class="text-left" style="">simon@yahoo.com</td>
-                                <td class="text-left" style="">17.10.2013</td>
-                            </tr>
-                            <tr data-row-id="7">
-                                <td class="text-left" style="">10236</td>
-                                <td class="text-left" style="">simon@yahoo.com</td>
-                                <td class="text-left" style="">12.10.2013</td>
-                            </tr>
-                            <tr data-row-id="8">
-                                <td class="text-left" style="">10252</td>
-                                <td class="text-left" style="">robert@bingo.com</td>
-                                <td class="text-left" style="">28.10.2013</td>
-                            </tr>
-                            <tr data-row-id="9">
-                                <td class="text-left" style="">10247</td>
-                                <td class="text-left" style="">robert@bingo.com</td>
-                                <td class="text-left" style="">23.10.2013</td>
-                            </tr>
+                            {% endfor %}
+
+
+
                             </tbody>
                         </table>
                     </div>
