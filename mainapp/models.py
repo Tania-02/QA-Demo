@@ -26,5 +26,8 @@ class Submission(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        unique_together = ('user', 'question',)
+
     def __str__(self):
         return f'{self.user} -> {self.question}'

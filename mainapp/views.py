@@ -1,7 +1,9 @@
+from collections import namedtuple
 from django.shortcuts import render, redirect
 from .models import User, Submission, Question
 from django.contrib import messages
-
+from django.db.models import Sum
+from django.shortcuts import get_object_or_404
 
 
 def index(request):
@@ -36,23 +38,35 @@ def logout(request):
 
 # login required
 def question(request, question_id):
-    print(request.session.get('user_id'))
-    if request.session.get('user_id') is not None:
+    user_id = request.session.get('user_id')
+    if user_id is not None:
+        question_ = get_object_or_404(Question, id=question_id)
+        user_ = get_object_or_404(User,id=user_id)
+
         if request.method == 'GET':
             return render(request, 'mainapp/question.html', {
-                'q_id': question_id
+                'question': question_
             })
         elif request.method == 'POST':
             # fetch answer
-            ...
-            # if answer is correct
+            answer_obtained = request.POST.get('answer')
 
-            #     add submission
-            #     redirect to next question
-            # else
-            #     set message as "wrong answer"
-            #     redirect to same question
-            ...
+            if answer_obtained is not None:
+                if question_.answer == answer_obtained:
+                    total_questions = Question.objects.count()
+                    submission = Submission()
+                    submission.question = question_
+                    submission.user = user_
+                    submission.save()
+
+                    return redirect('question', question_id=(question_id % total_questions) + 1)
+
+                else:
+                    messages.error(request, 'WRONG ANSWER!')
+                    return redirect('question', question_id=question_id)
+            else:
+                messages.warning(request, 'Please submit an answer!!')
+                return redirect('question', question_id=question_id)
     else:
         # TODO: add error message 'User must log in!'
         return redirect('login')
@@ -63,9 +77,37 @@ def leaderboard(request):
     data = []
 
     for user_object in user_objects:
-        user_points = sum(Submission.objects.values('question__point').filter(user=user_object))
+        user_points = Submission.objects \
+            .filter(user=user_object) \
+            .aggregate(Sum('question__point'))['question__point__sum']
+        if user_points is None:
+            user_points = 0
+
         data.append((user_object.name, user_points))
+
+    data.sort(key=lambda t: t[1], reverse=True)
 
     return render(request, 'mainapp/leaderboard.html', {
         'data': data
     })
+
+# USING NAMEDTUPLE
+# def leaderboard(request):
+#     user_objects = User.objects.all()
+#     LeaderboardData = namedtuple('LeaderboardData', ['name', 'points'])
+#     data = []
+#
+#     for user_object in user_objects:
+#         user_points = Submission.objects \
+#             .filter(user=user_object) \
+#             .aggregate(Sum('question__point'))['question__point__sum']
+#         if user_points is None:
+#             user_points = 0
+#
+#         data.append(LeaderboardData(name=user_object.name, points=user_points))
+#
+#     data.sort(key=lambda lbd: lbd.points, reverse=True)
+#
+#     return render(request, 'mainapp/leaderboard.html', {
+#         'data': data
+#     })
