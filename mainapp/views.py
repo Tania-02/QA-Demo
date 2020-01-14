@@ -41,7 +41,7 @@ def question(request, question_id):
     user_id = request.session.get('user_id')
     if user_id is not None:
         question_ = get_object_or_404(Question, id=question_id)
-        user_ = get_object_or_404(User,id=user_id)
+        user_ = get_object_or_404(User, id=user_id)
 
         if request.method == 'GET':
             return render(request, 'mainapp/question.html', {
@@ -54,13 +54,15 @@ def question(request, question_id):
             if answer_obtained is not None:
                 if question_.answer == answer_obtained:
                     total_questions = Question.objects.count()
-                    submission = Submission()
-                    submission.question = question_
-                    submission.user = user_
-                    submission.save()
+                    try:
+                        submission = Submission()
+                        submission.question = question_
+                        submission.user = user_
+                        submission.save()
+                    except :
+                        messages.warning(request,'You have already answered it!')
 
                     return redirect('question', question_id=(question_id % total_questions) + 1)
-
                 else:
                     messages.error(request, 'WRONG ANSWER!')
                     return redirect('question', question_id=question_id)
@@ -68,7 +70,7 @@ def question(request, question_id):
                 messages.warning(request, 'Please submit an answer!!')
                 return redirect('question', question_id=question_id)
     else:
-        # TODO: add error message 'User must log in!'
+        messages.error(request, 'Please log in to access this page')
         return redirect('login')
 
 
